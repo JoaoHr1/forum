@@ -1,29 +1,29 @@
 package br.com.joao.forum.controller
 
+import br.com.joao.forum.dto.NewTopicDto
 import br.com.joao.forum.model.Topic
 import br.com.joao.forum.model.User
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import br.com.joao.forum.services.TopicServices
+import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
 @RequestMapping("/topics")
-class TopicController {
+class TopicController(private val service: TopicServices) {
 
     @GetMapping
     fun list(): List<Topic> {
-        val topic = Topic(
-            id = 1,
-            title = "test",
-            message = "Testing kotlin",
-            user = User (
-                id = 1,
-                name = "Joao",
-                email = "joao@email.com"
-            )
-        )
-        return Arrays.asList(topic, topic, topic)
+        return service.list()
     }
 
+    @GetMapping
+    @RequestMapping("/{id}")
+    fun findById(@PathVariable id: Long): Topic {
+        return service.listById(id)
+    }
+
+    @PostMapping
+    fun register(@RequestBody dto: NewTopicDto) {
+        service.register(dto)
+    }
 }
