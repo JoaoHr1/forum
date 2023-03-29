@@ -1,9 +1,10 @@
 package br.com.joao.forum.controller
 
-import br.com.joao.forum.dto.NewTopicDto
+import br.com.joao.forum.dto.NewTopicForm
+import br.com.joao.forum.dto.TopicView
 import br.com.joao.forum.model.Topic
-import br.com.joao.forum.model.User
 import br.com.joao.forum.services.TopicServices
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -12,18 +13,18 @@ import java.util.*
 class TopicController(private val service: TopicServices) {
 
     @GetMapping
-    fun list(): List<Topic> {
+    fun list(): List<TopicView> {
         return service.list()
     }
 
     @GetMapping
     @RequestMapping("/{id}")
-    fun findById(@PathVariable id: Long): Topic {
+    fun findById(@PathVariable id: Long): TopicView {
         return service.listById(id)
     }
 
     @PostMapping
-    fun register(@RequestBody dto: NewTopicDto) {
+    fun register(@RequestBody @Valid dto: NewTopicForm) {
         service.register(dto)
     }
 }
